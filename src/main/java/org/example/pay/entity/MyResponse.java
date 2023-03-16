@@ -16,7 +16,7 @@ public class MyResponse {
     private int status;
     private String balance;
     private String[] order_number;
-    private String[] pay_amount;
+    private Float[] pay_amount;
     private String stu_card_num;
 
     private String[] businessesRegister;
@@ -69,8 +69,7 @@ public class MyResponse {
     private String[] orderMsg;
 
 
-    public MyResponse(String balance, String[] order_number, String[] pay_amount) {
-        this.balance = balance;
+    public MyResponse(String[] order_number, Float[] pay_amount) {
         this.order_number = order_number;
         this.pay_amount = pay_amount;
     }

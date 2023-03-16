@@ -54,12 +54,12 @@ public class StudentController {
     public MyResponse pay(@RequestParam("businesses_account") String businesses_account,
                           @RequestParam("stu_account") String stu_account,
                           @RequestParam("pay_amount") String pay_amount) {
-        return studentService.pay(businesses_account,stu_account,Float.valueOf(pay_amount));
+        return studentService.pay(businesses_account, stu_account, Float.valueOf(pay_amount));
     }
 
     @PostMapping("/recharge")
     public MyResponse recharge(@RequestParam("stu_account") String account,
-                                @RequestParam("recharge_amount") String recharge_amount) {
+                               @RequestParam("recharge_amount") String recharge_amount) {
         return studentService.recharge(account, Float.valueOf(recharge_amount));
     }
 
@@ -70,8 +70,13 @@ public class StudentController {
 
     @PostMapping("/changeStudentPassword")
     public MyResponse changeStudentPassword(@RequestParam("stu_account") String stu_account,
-                          @RequestParam("stu_password") String stu_password,
-                          @RequestParam("stu_new_password") String stu_new_password) {
-        return studentService.changeStudentPassword(stu_account,stu_password,stu_new_password);
+                                            @RequestParam("stu_password") String stu_password,
+                                            @RequestParam("stu_new_password") String stu_new_password) {
+        return studentService.changeStudentPassword(stu_account, stu_password, stu_new_password);
+    }
+
+    @PostMapping("/loginMsg")
+    public MyResponse loginMsg(@RequestParam("stu_account") String account) {
+        return studentService.loginMsg(account);
     }
 }

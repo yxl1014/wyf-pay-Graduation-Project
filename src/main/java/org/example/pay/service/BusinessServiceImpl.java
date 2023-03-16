@@ -6,7 +6,6 @@ import org.example.pay.common.SignUtil;
 import org.example.pay.common.TwoHouseUtil;
 import org.example.pay.entity.*;
 import org.example.pay.mapper.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;

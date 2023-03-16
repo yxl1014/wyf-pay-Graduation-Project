@@ -1,12 +1,15 @@
 package org.example.pay.service;
 
 import org.example.pay.common.CheckUtil;
-import org.example.pay.entity.Card;
-import org.example.pay.entity.MyResponse;
-import org.example.pay.entity.Student;
+import org.example.pay.entity.*;
 import org.example.pay.mapper.CardMapper;
+import org.example.pay.mapper.ChildMapper;
+import org.example.pay.mapper.OrderMapper;
 import org.example.pay.mapper.StudentMapper;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author yxl
@@ -22,10 +25,16 @@ public class StudentServiceImpl {
 
     private final CardMapper cardMapper;
 
-    public StudentServiceImpl(StudentMapper studentMapper, CheckUtil checkUtil, CardMapper cardMapper) {
+    private final ChildMapper childMapper;
+
+    private final OrderMapper orderMapper;
+
+    public StudentServiceImpl(StudentMapper studentMapper, CheckUtil checkUtil, CardMapper cardMapper, ChildMapper childMapper, OrderMapper orderMapper) {
         this.studentMapper = studentMapper;
         this.checkUtil = checkUtil;
         this.cardMapper = cardMapper;
+        this.childMapper = childMapper;
+        this.orderMapper = orderMapper;
     }
 
     public MyResponse register(String account, String password, String card_num) {
@@ -127,7 +136,10 @@ public class StudentServiceImpl {
     }
 
     public MyResponse pay(String businesses_account, String stu_account, Float pay_amount) {
-        //TODO 获取商户
+        Child child = childMapper.findChildByBid(businesses_account);
+        if (child == null) {
+            return new MyResponse(3);
+        }
         Student user = studentMapper.findUserByAccount(stu_account);
         if (user == null) {
             //用户不存在
@@ -136,9 +148,11 @@ public class StudentServiceImpl {
         if (user.getStu_amount() < pay_amount) {
             return new MyResponse(0);
         }
-        //TODO 商户加钱
+
         int ok1 = studentMapper.updateAmountByAccount(user.getStu_amount() - pay_amount, stu_account);
-        return new MyResponse(ok1 == 1 ? 1 : 2);
+        int ok2 = childMapper.updateAmountByAccount(child.getAmount() + pay_amount, businesses_account);
+        int ok3 = childMapper.updateAllAmountByAccount(child.getAll_amount() + pay_amount, businesses_account);
+        return new MyResponse(ok1 + ok2 + ok3 == 3 ? 1 : 2);
     }
 
     public MyResponse recharge(String account, Float recharge_amount) {
@@ -147,14 +161,28 @@ public class StudentServiceImpl {
             //用户不存在
             return new MyResponse(2);
         }
-        //TODO 商户加钱
         int ok1 = studentMapper.updateAmountByAccount(user.getStu_amount() + recharge_amount, account);
         return new MyResponse(ok1 == 1 ? 1 : 0);
     }
 
     public MyResponse checkConsumptionRecords(String order_number) {
-        //TODO 得有表 不然现在写不了
-        return null;
+        Order order = orderMapper.findOrderByOrderNum(Integer.parseInt(order_number));
+        if (order == null) {
+            return new MyResponse(0);
+        }
+        Child child = childMapper.findChildByBid(order.getBusiness_num());
+        List<String> res = new ArrayList<>();
+        res.add(order.getBusiness_num());
+        if (child == null) {
+            res.add(null);
+            res.add(order.getCreate_time().toString());
+            res.add(String.valueOf(0));
+        } else {
+            res.add(child.getBusiness_name());
+            res.add(order.getCreate_time().toString());
+            res.add(String.valueOf(1));
+        }
+        return new MyResponse(1, res.toArray(new String[0]));
     }
 
     public MyResponse changeStudentPassword(String stu_account, String stu_password, String stu_new_password) {
@@ -164,5 +192,16 @@ public class StudentServiceImpl {
         }
         int ok = studentMapper.updatePasswordByAccount(stu_new_password, stu_account);
         return new MyResponse(ok == 1 ? 1 : 2);
+    }
+
+    public MyResponse loginMsg(String account) {
+        List<Order> orders = orderMapper.findAllOrderByStuAccount(account);
+        List<String> oid = new ArrayList<>();
+        List<Float> amount = new ArrayList<>();
+        for (Order o : orders) {
+            oid.add(String.valueOf(o.getOrder_num()));
+            amount.add(o.getAmount());
+        }
+        return new MyResponse(oid.toArray(new String[0]), amount.toArray(new Float[0]));
     }
 }

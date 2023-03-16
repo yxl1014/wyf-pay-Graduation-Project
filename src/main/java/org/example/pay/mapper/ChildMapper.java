@@ -34,4 +34,12 @@ public interface ChildMapper {
 
     @Update("update child set business_password = #{pwd} where business_num = #{num}")
     int updatePwdByNum(@Param("pwd") String pwd, @Param("num") String num);
+
+
+    @Update("update child set amount = #{amount} where business_num = #{business_num}")
+    int updateAmountByAccount(@Param("amount") float amount, @Param("business_num") String account);
+
+    @Update("update child set all_amount = #{all_amount} where business_num = #{business_num}")
+    int updateAllAmountByAccount(@Param("all_amount") float all_amount, @Param("business_num") String account);
+
 }

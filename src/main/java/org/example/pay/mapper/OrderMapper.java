@@ -19,12 +19,15 @@ public interface OrderMapper {
             "values(#{business_num},#{parent_num},#{student_num},#{amount},#{create_time})")
     int insertOrder(Order order);
 
-    @Select("select * from order where parent_num =#{p}")
+    @Select("select * from order where parent_num = #{p}")
     List<Order> findAllOrderByParentNum(@Param("p") String parent_num);
 
-    @Select("select * from order where business_num =#{business_num}")
+    @Select("select * from order where business_num = #{business_num}")
     List<Order> findAllOrderByBusinessNum(@Param("business_num") String business_num);
 
-    @Select("select * from order where order_num =#{order_num}")
+    @Select("select * from order where order_num = #{order_num}")
     Order findOrderByOrderNum(@Param("order_num") int order_num);
+
+    @Select("select * from order where student_num = #{student_num}")
+    List<Order> findAllOrderByStuAccount(@Param("student_num") String stu_account);
 }
