@@ -1,9 +1,6 @@
 package org.example.pay.mapper;
 
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 import org.example.pay.entity.Jurisdiction;
 
 /**
@@ -19,4 +16,13 @@ public interface JurisdictionMapper {
 
     @Select("select * from jurisdiction where child_num = #{child_num}")
     Jurisdiction findJurisdictionByChildNum(@Param("child_num") String child_num);
+
+    @Update("update jurisdiction set changeName_j = #{status} where child_num = #{account}")
+    int updateChangeNameByChildNum(@Param("status")int status,@Param("account") String account);
+
+    @Update("update jurisdiction set changePassword_j = #{status} where child_num = #{account}")
+    int updateChangePasswordByChildNum(@Param("status")int status,@Param("account") String account);
+
+    @Update("update jurisdiction set using_j = #{status} where child_num = #{account}")
+    int updateUsingByChildNum(@Param("status")int status,@Param("account") String account);
 }

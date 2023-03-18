@@ -3,6 +3,8 @@ package org.example.pay.mapper;
 import org.apache.ibatis.annotations.*;
 import org.example.pay.entity.Business;
 
+import java.util.List;
+
 /**
  * @author yxl
  * @date 2023/3/15 上午10:49
@@ -20,6 +22,9 @@ public interface BusinessMapper {
     @Select("select * from business where parent_num = #{parent_num}")
     Business findBusinessByPn(@Param("parent_num") String parent_num);
 
+    @Select("select * from business where id_num = #{id_num}")
+    Business findBusinessById(@Param("id_num") String id_num);
+
     @Insert("insert into business(id_num,people,phone_num,shop_name,amount,parent_num,parent_password,create_time) " +
             "values(#{id_num},#{people},#{phone_num},#{shop_name},#{amount},#{parent_num},#{parent_password},#{create_time})")
     int insertBusiness(Business business);
@@ -29,4 +34,11 @@ public interface BusinessMapper {
 
     @Update("update business set parent_password = #{pwd} where parent_num = #{num}")
     int updatePwdByNum(@Param("pwd") String pwd, @Param("num") String num);
+
+    @Select("select * from business")
+    List<Business> findAllBusiness();
+
+    @Delete("delete from business where parent_password = #{parent_num}")
+    int deleteBusinessByPn(@Param("parent_num") String parent_num);
+
 }

@@ -69,6 +69,61 @@ public class MyResponse {
     private String[] orderMsg;
 
 
+    private String[] parent_num;
+    private String[] create_time;
+
+    public MyResponse(int status, String[] parent_num, String[] create_time) {
+        this.status = status;
+        this.parent_num = parent_num;
+        this.create_time = create_time;
+    }
+
+    private String[] child_num;
+    private String[] child_name;
+
+    public MyResponse(int status, String[] child_num, String[] child_name, String[] create_time) {
+        this.status = status;
+        this.create_time = create_time;
+        this.child_num = child_num;
+        this.child_name = child_name;
+    }
+
+    private String[] stu_num;
+
+    public MyResponse(int status, Integer[] order_id, String[] stu_num, String[] create_time, Float[] order_amount) {
+        this.status = status;
+        this.order_id = order_id;
+        this.order_amount = order_amount;
+        this.create_time = create_time;
+        this.stu_num = stu_num;
+    }
+
+    private Student student;
+
+    public MyResponse(int status, Student student) {
+        this.status = status;
+        this.student = student;
+    }
+
+    public MyResponse(int status, String[] var1, String[] var2, String[] var3, String[] var4, Float[] var5, Integer[] var6) {
+        this.status = status;
+        this.businessesRegister = var1;
+        this.login_cId = var2;
+        this.login_cName = var3;
+        this.login_cTime = var4;
+        this.login_allAmount = var5;
+        this.order_id = var6;
+    }
+
+    public MyResponse(int status, String[] var1, String[] var2, String[] var3, Integer[] var4, String[] var5) {
+        this.status = status;
+        this.businessesRegister = var1;
+        this.login_cId = var2;
+        this.login_cName = var3;
+        this.order_id = var4;
+        this.orderMsg = var5;
+    }
+
     public MyResponse(String[] order_number, Float[] pay_amount) {
         this.order_number = order_number;
         this.pay_amount = pay_amount;
@@ -88,5 +143,10 @@ public class MyResponse {
     public MyResponse(int status, String[] businessesRegister) {
         this.status = status;
         this.businessesRegister = businessesRegister;
+    }
+
+    public MyResponse(int status, Integer[] having_authority) {
+        this.status = status;
+        this.having_authority = having_authority;
     }
 }

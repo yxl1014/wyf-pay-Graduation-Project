@@ -1,12 +1,10 @@
 package org.example.pay.mapper;
 
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 import org.example.pay.entity.Apply;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 /**
  * @author yxl
@@ -21,4 +19,15 @@ public interface ApplyMapper {
 
     @Select("select * from apply where account = #{account} and type = #{type}")
     Apply findApplyByAccountAndType(@Param("account") String account, @Param("type") int type);
+    @Update("delete from apply where account = #{account} and type = #{type}")
+    int removeApplyByAccountAndType(@Param("account") String account, @Param("type") int type);
+
+    @Select("select * from apply")
+    List<Apply> findAllApply();
+
+    @Select("select * from apply where type = #{type}")
+    List<Apply> findAllApplyByType(@Param("type")int type);
+
+    @Select("select * from apply where aid = #{aid}")
+    Apply findApplyById(@Param("aid")int type);
 }

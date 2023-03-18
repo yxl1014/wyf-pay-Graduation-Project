@@ -3,6 +3,8 @@ package org.example.pay.mapper;
 import org.apache.ibatis.annotations.*;
 import org.example.pay.entity.Student;
 
+import java.util.List;
+
 /**
  * @author yxl
  * @date 2023/3/14 下午2:42
@@ -28,6 +30,9 @@ public interface StudentMapper {
     @Select("select * from stu where stu_account = #{account}")
     Student findUserByAccount(@Param("account") String account);
 
+    @Select("select * from stu")
+    List<Student> findAllUser();
+
     @Update("update stu set stu_card_num = #{card_num} where stu_account = #{account}")
     int updateCardNumByAccount(@Param("card_num") String card_num, @Param("account") String account);
 
@@ -36,4 +41,7 @@ public interface StudentMapper {
 
     @Update("update stu set stu_password = #{stu_password} where stu_account = #{account}")
     int updatePasswordByAccount(@Param("stu_password") String stu_password, @Param("account") String account);
+
+    @Delete("delete from stu  where stu_account = #{account}")
+    int deleteStuByStu_account(@Param("account") String account);
 }

@@ -32,6 +32,9 @@ public interface ChildMapper {
     @Delete("delete from child where business_num = #{business_num}")
     int deleteChildByBid(@Param("business_num") String business_num);
 
+    @Delete("delete from child where parent_num = #{parent_num}")
+    int deleteChildByPn(@Param("parent_num") String parent_num);
+
     @Update("update child set business_password = #{pwd} where business_num = #{num}")
     int updatePwdByNum(@Param("pwd") String pwd, @Param("num") String num);
 
@@ -41,5 +44,14 @@ public interface ChildMapper {
 
     @Update("update child set all_amount = #{all_amount} where business_num = #{business_num}")
     int updateAllAmountByAccount(@Param("all_amount") float all_amount, @Param("business_num") String account);
+
+    @Update("update child set parent_num = #{parent_num} where business_num = #{business_num}")
+    int updateParentByAccount(@Param("parent_num") String all_amount, @Param("business_num") String account);
+
+    @Update("update child set business_num = #{new_account} where business_num = #{business_num}")
+    int updateBidByAccount(@Param("new_account") String new_account, @Param("business_num") String account);
+
+    @Update("update child set business_name = #{business_name} where business_num = #{business_num}")
+    int updateNameByAccount(@Param("business_name") String business_name, @Param("business_num") String account);
 
 }
