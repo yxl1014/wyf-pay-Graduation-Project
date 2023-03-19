@@ -149,4 +149,11 @@ public class MyResponse {
         this.status = status;
         this.having_authority = having_authority;
     }
+
+    private Order order;
+
+    public MyResponse(int status, Order order) {
+        this.status = status;
+        this.order = order;
+    }
 }

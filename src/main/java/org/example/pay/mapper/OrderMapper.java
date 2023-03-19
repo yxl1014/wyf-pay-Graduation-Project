@@ -30,4 +30,7 @@ public interface OrderMapper {
 
     @Select("select * from order where student_num = #{student_num}")
     List<Order> findAllOrderByStuAccount(@Param("student_num") String stu_account);
+
+    @Select("select * from order")
+    List<Order> findAllOrder();
 }

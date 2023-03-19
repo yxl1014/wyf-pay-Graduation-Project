@@ -105,4 +105,23 @@ public class ManageController {
         return manageService.takeAuthority();
     }
 
+    @PostMapping("/auditAuthority")
+    public MyResponse auditAuthority(@RequestParam("businesses_account") String businesses_account,
+                                     @RequestParam("request_authority") String request_authority,
+                                     @RequestParam("result") String result) {
+        return manageService.auditAuthority(businesses_account,
+                Integer.parseInt(request_authority),
+                Integer.parseInt(result));
+    }
+
+    @PostMapping("/allHistoryOrders")
+    public MyResponse allHistoryOrders() {
+        return manageService.allHistoryOrders();
+    }
+
+    @PostMapping("/allHistoryOrdersMsg")
+    public MyResponse allHistoryOrdersMsg(@RequestParam("order_num") String order_num) {
+        return manageService.allHistoryOrdersMsg(Integer.parseInt(order_num));
+    }
+
 }

@@ -291,7 +291,7 @@ public class ManageServiceImpl {
         }
 
         int ok2 = applyMapper.removeApplyByAccountAndType(apply.getAccount(), apply.getStatus());
-        return new MyResponse(ok1+ok2 == 2 ? 1 : 0);
+        return new MyResponse(ok1 + ok2 == 2 ? 1 : 0);
     }
 
     public MyResponse takeAuthority() {
@@ -322,5 +322,37 @@ public class ManageServiceImpl {
         }
         return new MyResponse(1, var1.toArray(new String[0]), var2.toArray(new String[0]), var3.toArray(new String[0]),
                 var4.toArray(new Integer[0]), var5.toArray(new String[0]));
+    }
+
+    public MyResponse auditAuthority(String businesses_account, int request, int result) {
+        Apply apply = applyMapper.findApplyByAccountAndType(businesses_account, request);
+        if (apply == null) {
+            return new MyResponse(0);
+        }
+        if (result == 1) {
+            if (request == 1) {
+                jurisdictionMapper.updateChangeNameByChildNum(1, businesses_account);
+            } else {
+                jurisdictionMapper.updateChangePasswordByChildNum(1, businesses_account);
+            }
+        }
+        int ok = applyMapper.removeApplyByAccountAndType(businesses_account, request);
+        return new MyResponse(ok);
+    }
+
+    public MyResponse allHistoryOrders() {
+        List<Order> allOrder = orderMapper.findAllOrder();
+        List<Integer> num = new ArrayList<>();
+        List<Float> amount = new ArrayList<>();
+        for (Order o : allOrder) {
+            num.add(o.getOrder_num());
+            amount.add(o.getAmount());
+        }
+        return new MyResponse(1, num.toArray(new Integer[0]), amount.toArray(new Float[0]));
+    }
+
+    public MyResponse allHistoryOrdersMsg(int order_num) {
+        Order order = orderMapper.findOrderByOrderNum(order_num);
+        return new MyResponse(order == null ? 1 : 0, order);
     }
 }
