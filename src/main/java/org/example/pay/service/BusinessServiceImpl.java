@@ -70,7 +70,7 @@ public class BusinessServiceImpl {
             String cp = randomUtil.getRandomPassword();
 
             int ok2 = childMapper.insertChild(new Child(cn, shop_name, id_num, cp, 0, 0,
-                    new Timestamp(now), twoHouseUtil.get2WHouse(signUtil.encrypt(cn,"pay-10000-10086-"))));
+                    new Timestamp(now), twoHouseUtil.get2WHouse(signUtil.encrypt(cn, "pay-10000-10086-"))));
 
             int ok3 = jurisdictionMapper.insertJurisdiction(cn);
 
@@ -86,7 +86,7 @@ public class BusinessServiceImpl {
             String cp = randomUtil.getRandomPassword();
 
             int ok1 = childMapper.insertChild(new Child(cn, shop_name, id_num, cp, 0, 0,
-                    new Timestamp(now), twoHouseUtil.get2WHouse(signUtil.encrypt(cn,"pay-10000-10086-"))));
+                    new Timestamp(now), twoHouseUtil.get2WHouse(signUtil.encrypt(cn, "pay-10000-10086-"))));
             int ok2 = jurisdictionMapper.insertJurisdiction(cn);
             int ok3 = applyMapper.insertApply(cn, 3, new Timestamp(now), 2, null);
             if (ok1 + ok2 + ok3 == 3) {
@@ -137,7 +137,7 @@ public class BusinessServiceImpl {
             Child child = childMapper.findChildByBid(businesses_account);
             List<String> login_child = new ArrayList<>();
             List<Integer> having_authority = new ArrayList<>();
-            Business business = businessMapper.findBusinessByPn(child.getParent_num());
+            Business business = businessMapper.findBusinessById(child.getParent_num());
             login_child.add(business.getParent_num());
             login_child.add(child.getBusiness_name());
             login_child.add(child.getCreate_time().toString());
@@ -146,7 +146,9 @@ public class BusinessServiceImpl {
                 having_authority.add(1);
             } else {
                 Apply apply = applyMapper.findApplyByAccountAndType(businesses_account, 1);
-                if (apply.getStatus() == 2) {
+                if (apply == null) {
+                    having_authority.add(0);
+                } else if (apply.getStatus() == 2) {
                     having_authority.add(2);
                 }
             }
@@ -154,7 +156,9 @@ public class BusinessServiceImpl {
                 having_authority.add(1);
             } else {
                 Apply apply = applyMapper.findApplyByAccountAndType(businesses_account, 2);
-                if (apply.getStatus() == 2) {
+                if (apply == null) {
+                    having_authority.add(0);
+                } else if (apply.getStatus() == 2) {
                     having_authority.add(2);
                 }
             }
@@ -249,6 +253,10 @@ public class BusinessServiceImpl {
             return new MyResponse(0);
         }
         if (type == 2 && jurisdiction.isChangePassword_j()) {
+            return new MyResponse(0);
+        }
+        Apply apply = applyMapper.findApplyByAccountAndType(businesses_account, type);
+        if (apply != null) {
             return new MyResponse(0);
         }
         return new MyResponse(applyMapper.insertApply(businesses_account, type,
