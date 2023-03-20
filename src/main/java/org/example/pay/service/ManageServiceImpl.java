@@ -129,14 +129,14 @@ public class ManageServiceImpl {
                 if (apply == null) {
                     return new MyResponse(0);
                 }
-                ok += applyMapper.removeApplyByAccountAndType(account, authority);
+                ok += applyMapper.removeApplyByAid(apply.getAid());
                 return new MyResponse(ok);
             }
             default:
                 return new MyResponse(0);
         }
         if (apply != null) {
-            ok += applyMapper.removeApplyByAccountAndType(account, authority);
+            ok += applyMapper.removeApplyByAid(apply.getAid());
         }
         return new MyResponse(ok >= 1 ? 1 : 0);
     }
@@ -290,7 +290,7 @@ public class ManageServiceImpl {
             ok1 = childMapper.deleteChildByBid(apply.getAccount());
         }
 
-        int ok2 = applyMapper.removeApplyByAccountAndType(apply.getAccount(), apply.getStatus());
+        int ok2 = applyMapper.removeApplyByAid(id);
         return new MyResponse(ok1 + ok2 == 2 ? 1 : 0);
     }
 
@@ -336,7 +336,7 @@ public class ManageServiceImpl {
                 jurisdictionMapper.updateChangePasswordByChildNum(1, businesses_account);
             }
         }
-        int ok = applyMapper.removeApplyByAccountAndType(businesses_account, request);
+        int ok = applyMapper.removeApplyByAid(apply.getAid());
         return new MyResponse(ok);
     }
 

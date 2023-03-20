@@ -20,4 +20,12 @@ public class Order {
     private String student_num;
     private float amount;
     private Timestamp create_time;
+
+    public Order(String business_num, String parent_num, String student_num, float amount, Timestamp create_time) {
+        this.business_num = business_num;
+        this.parent_num = parent_num;
+        this.student_num = student_num;
+        this.amount = amount;
+        this.create_time = create_time;
+    }
 }

@@ -1,13 +1,13 @@
 package org.example.pay.service;
 
 import org.example.pay.common.CheckUtil;
+import org.example.pay.common.SignUtil;
 import org.example.pay.entity.*;
-import org.example.pay.mapper.CardMapper;
-import org.example.pay.mapper.ChildMapper;
-import org.example.pay.mapper.OrderMapper;
-import org.example.pay.mapper.StudentMapper;
+import org.example.pay.mapper.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,12 +29,18 @@ public class StudentServiceImpl {
 
     private final OrderMapper orderMapper;
 
-    public StudentServiceImpl(StudentMapper studentMapper, CheckUtil checkUtil, CardMapper cardMapper, ChildMapper childMapper, OrderMapper orderMapper) {
+    private final BusinessMapper businessMapper;
+
+    private final SignUtil signUtil;
+
+    public StudentServiceImpl(StudentMapper studentMapper, CheckUtil checkUtil, CardMapper cardMapper, ChildMapper childMapper, OrderMapper orderMapper, BusinessMapper businessMapper, SignUtil signUtil) {
         this.studentMapper = studentMapper;
         this.checkUtil = checkUtil;
         this.cardMapper = cardMapper;
         this.childMapper = childMapper;
         this.orderMapper = orderMapper;
+        this.businessMapper = businessMapper;
+        this.signUtil = signUtil;
     }
 
     public MyResponse register(String account, String password, String card_num) {
@@ -152,6 +158,10 @@ public class StudentServiceImpl {
         int ok1 = studentMapper.updateAmountByAccount(user.getStu_amount() - pay_amount, stu_account);
         int ok2 = childMapper.updateAmountByAccount(child.getAmount() + pay_amount, businesses_account);
         int ok3 = childMapper.updateAllAmountByAccount(child.getAll_amount() + pay_amount, businesses_account);
+
+        Business business = businessMapper.findBusinessById(child.getParent_num());
+        int i = orderMapper.insertOrder(new Order(child.getBusiness_num(), business.getParent_num(),
+                user.getStu_account(), pay_amount, new Timestamp(System.currentTimeMillis())));
         return new MyResponse(ok1 + ok2 + ok3 == 3 ? 1 : 2);
     }
 
@@ -203,5 +213,10 @@ public class StudentServiceImpl {
             amount.add(o.getAmount());
         }
         return new MyResponse(oid.toArray(new String[0]), amount.toArray(new Float[0]));
+    }
+
+    public MyResponse takeMsg(String data) {
+        String decode = signUtil.decrypt(data);
+        return new MyResponse(1, decode);
     }
 }

@@ -79,4 +79,10 @@ public class StudentController {
     public MyResponse loginMsg(@RequestParam("stu_account") String account) {
         return studentService.loginMsg(account);
     }
+
+    @PostMapping("takeMsg")
+    @ResponseBody
+    public MyResponse takeMsg(@RequestParam("jiami")String data){
+        return studentService.takeMsg(data);
+    }
 }

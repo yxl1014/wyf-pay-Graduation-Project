@@ -4,6 +4,7 @@ import org.example.pay.common.TwoHouseUtil;
 import org.example.pay.entity.MyResponse;
 import org.example.pay.service.BusinessServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -76,7 +77,7 @@ public class BusinessController {
         return businessService.changeBusinessesPassword(businesses_account, businesses_password, businesses_new_password);
     }
 
-    @PostMapping("getQrcode")
+    @PostMapping(value = "getQrcode", produces = {MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
     public byte[] getQrcode(@RequestParam("businesses_account") String businesses_account) {
         return businessService.getQrcode(businesses_account);
     }

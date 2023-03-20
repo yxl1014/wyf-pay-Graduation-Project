@@ -23,7 +23,7 @@ public interface ChildMapper {
     @Select("select pic from child where business_num = #{business_num}")
     byte[] findPicByBid(@Param("business_num") String business_num);
 
-    @Select("select count(1) form child where business_num = #{business_num} and business_password = #{business_password}")
+    @Select("select count(1) from child where business_num = #{business_num} and business_password = #{business_password}")
     int findAllChildByNP(@Param("business_num") String business_num,@Param("business_password") String business_password);
 
     @Select("select * from child where parent_num = #{parent_num}")

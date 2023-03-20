@@ -51,7 +51,7 @@ public class BusinessServiceImpl {
     }
 
     public MyResponse businessesRegister(String people, String id_num, String phone_num, String shop_name, Float amount) throws IOException {
-        if (checkUtil.checkIdCardIsRight(id_num)) {
+        if (!checkUtil.checkIdCardIsRight(id_num)) {
             //身份证格式不正确
             return new MyResponse(2);
         }
@@ -219,7 +219,8 @@ public class BusinessServiceImpl {
     }
 
     public byte[] getQrcode(String businesses_account) {
-        return childMapper.findPicByBid(businesses_account);
+        Child child = childMapper.findChildByBid(businesses_account);
+        return child.getPic();
     }
 
     public MyResponse todayOrdersMsg(String businesses_account) {
@@ -253,4 +254,6 @@ public class BusinessServiceImpl {
         return new MyResponse(applyMapper.insertApply(businesses_account, type,
                 new Timestamp(System.currentTimeMillis()), 2, request_reason));
     }
+
+
 }

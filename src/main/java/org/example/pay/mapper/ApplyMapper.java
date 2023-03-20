@@ -13,14 +13,14 @@ import java.util.List;
 
 @Mapper
 public interface ApplyMapper {
-    @Insert("insert into apply(account,type,create_time,status) values(#{account},#{type},#{create_time},#{status},#{msg})")
+    @Insert("insert into apply(account,type,create_time,status,msg) values(#{account},#{type},#{create_time},#{status},#{msg})")
     int insertApply(@Param("account") String account, @Param("type") int type,
                     @Param("create_time") Timestamp create_time, @Param("status") int status, @Param("msg") String msg);
 
     @Select("select * from apply where account = #{account} and type = #{type}")
     Apply findApplyByAccountAndType(@Param("account") String account, @Param("type") int type);
-    @Update("delete from apply where account = #{account} and type = #{type}")
-    int removeApplyByAccountAndType(@Param("account") String account, @Param("type") int type);
+    @Update("delete from apply where aid = #{aid}")
+    int removeApplyByAid(@Param("aid")int type);
 
     @Select("select * from apply")
     List<Apply> findAllApply();
