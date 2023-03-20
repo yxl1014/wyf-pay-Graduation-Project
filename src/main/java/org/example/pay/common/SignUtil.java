@@ -1,14 +1,14 @@
 package org.example.pay.common;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.Cipher;
-import javax.crypto.KeyGenerator;
 import javax.crypto.spec.SecretKeySpec;
-import java.nio.charset.StandardCharsets;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.util.Base64Utils;
 
+import javax.crypto.spec.IvParameterSpec;
 /**
  * @author yxl
  * @date 2023/3/15 下午1:40
@@ -17,105 +17,191 @@ import java.security.SecureRandom;
 @Component
 public class SignUtil {
 
-    private Object SysConfig;
-    private final byte[] password = generateKey("10000-10086");
+    /**
+     * AES加密工具类
+     *
+     * @author ACGkaka
+     * @since 2021-06-18 19:11:03
+     */
+    /**
+     * 编码
+     */
+    private static final String ENCODING = "UTF-8";
+    /**
+     * 算法定义
+     */
+    private static final String AES_ALGORITHM = "AES";
+    /**
+     * 指定填充方式
+     */
+    private static final String CIPHER_PADDING = "AES/ECB/PKCS5Padding";
+    private static final String CIPHER_CBC_PADDING = "AES/CBC/PKCS5Padding";
+    /**
+     * 偏移量(CBC中使用，增强加密算法强度)
+     */
+    private static final String IV_SEED = "1234567812345678";
 
     /**
-     * 注意：即便strKey相同 但是每次生成的byte[]却是不同的
+     * AES加密
      *
-     * @param strKey
-     * @return 16Byte的加密password
+     * @param content 待加密内容
+     * @param aesKey  密码
+     * @return
      */
-    private byte[] generateKey(String strKey) {
-        try {
-            KeyGenerator generator = KeyGenerator.getInstance("AES");
-            SecureRandom secureRandom = SecureRandom.getInstance("SHA1PRNG");
-            int length = 128;
-            generator.init(length, secureRandom);
-            return generator.generateKey().getEncoded();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    public String encrypt(String content) {
-        return encrypt(content, password);
-    }
-
-    private String encrypt(String content, byte[] keyByte) {
-        try {
-            //初始化密钥 SecretKeySpec(byte[] key, String algorithm)
-            SecretKeySpec key = new SecretKeySpec(keyByte, "AES");
-            //创建密码器
-            Cipher cipher = Cipher.getInstance("AES");
-            //初始化 key要求是16位 16个字节=16*8=128bit 128位
-            cipher.init(Cipher.ENCRYPT_MODE, key);
-
-            byte[] byteContent = content.getBytes(StandardCharsets.UTF_8);
-            //获取加密后字节数组
-            byte[] result = cipher.doFinal(byteContent);
-
-            //获取加密后的字符串
-            return parseByte2HexStr(result);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    public String decrypt(String content) {
-        return decrypt(content, password);
-    }
-
-    private String decrypt(String content, byte[] keyByte) {
-        try {
-            SecretKeySpec key = new SecretKeySpec(keyByte, "AES");
-            Cipher cipher = Cipher.getInstance("AES");// 创建密码器
-            cipher.init(Cipher.DECRYPT_MODE, key);// 初始化
-            byte[] result = cipher.doFinal(parseHexStr2Byte(content));
-            return new String(result); // 明文
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    /**
-     * 将16进制转换为二进制
-     *
-     * @param hexStr 字符串
-     * @return 字节数组
-     */
-    private byte[] parseHexStr2Byte(String hexStr) {
-        if (hexStr.length() < 1) {
+    public String encrypt(String content, String aesKey) {
+        if (StringUtils.isBlank(content)) {
             return null;
         }
-        byte[] result = new byte[hexStr.length() / 2];
-        for (int i = 0; i < hexStr.length() / 2; i++) {
-            int high = Integer.parseInt(hexStr.substring(i * 2, i * 2 + 1), 16);
-            int low = Integer.parseInt(hexStr.substring(i * 2 + 1, i * 2 + 2), 16);
-            result[i] = (byte) (high * 16 + low);
+        //判断秘钥是否为16位
+        if (StringUtils.isNotBlank(aesKey) && aesKey.length() == 16) {
+            try {
+                //对密码进行编码
+                byte[] bytes = aesKey.getBytes(ENCODING);
+                //设置加密算法，生成秘钥
+                SecretKeySpec skeySpec = new SecretKeySpec(bytes, AES_ALGORITHM);
+                // "算法/模式/补码方式"
+                Cipher cipher = Cipher.getInstance(CIPHER_PADDING);
+                //选择加密
+                cipher.init(Cipher.ENCRYPT_MODE, skeySpec);
+                //根据待加密内容生成字节数组
+                byte[] encrypted = cipher.doFinal(content.getBytes(ENCODING));
+                //返回base64字符串
+                return Base64Utils.encodeToString(encrypted);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+
+        } else {
+            return null;
         }
-        return result;
     }
 
     /**
-     * 将二进制转换成16进制
+     * 解密
      *
-     * @param buf 字节数组
-     * @return 字符串
+     * @param content 待解密内容
+     * @param aesKey  密码
+     * @return
      */
-    private String parseByte2HexStr(byte[] buf) {
-        StringBuilder sb = new StringBuilder();
-        for (byte b : buf) {
-            String hex = Integer.toHexString(b & 0xFF);
-            if (hex.length() == 1) {
-                hex = '0' + hex;
-            }
-            sb.append(hex.toUpperCase());
+    public String decrypt(String content, String aesKey) {
+        if (StringUtils.isBlank(content)) {
+            return null;
         }
-        return sb.toString();
+        //判断秘钥是否为16位
+        if (StringUtils.isNotBlank(aesKey) && aesKey.length() == 16) {
+            try {
+                //对密码进行编码
+                byte[] bytes = aesKey.getBytes(ENCODING);
+                //设置解密算法，生成秘钥
+                SecretKeySpec skeySpec = new SecretKeySpec(bytes, AES_ALGORITHM);
+                // "算法/模式/补码方式"
+                Cipher cipher = Cipher.getInstance(CIPHER_PADDING);
+                //选择解密
+                cipher.init(Cipher.DECRYPT_MODE, skeySpec);
+
+                //先进行Base64解码
+                byte[] decodeBase64 = Base64Utils.decodeFromString(content);
+
+                //根据待解密内容进行解密
+                byte[] decrypted = cipher.doFinal(decodeBase64);
+                //将字节数组转成字符串
+                return new String(decrypted, ENCODING);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+
+        } else {
+            return null;
+        }
     }
 
+    /**
+     * AES_CBC加密
+     *
+     * @param content 待加密内容
+     * @param aesKey  密码
+     * @return
+     */
+    public String encryptCBC(String content, String aesKey) {
+        if (StringUtils.isBlank(content)) {
+            return null;
+        }
+        //判断秘钥是否为16位
+        if (StringUtils.isNotBlank(aesKey) && aesKey.length() == 16) {
+            try {
+                //对密码进行编码
+                byte[] bytes = aesKey.getBytes(ENCODING);
+                //设置加密算法，生成秘钥
+                SecretKeySpec skeySpec = new SecretKeySpec(bytes, AES_ALGORITHM);
+                // "算法/模式/补码方式"
+                Cipher cipher = Cipher.getInstance(CIPHER_CBC_PADDING);
+                //偏移
+                IvParameterSpec iv = new IvParameterSpec(IV_SEED.getBytes(ENCODING));
+                //选择加密
+                cipher.init(Cipher.ENCRYPT_MODE, skeySpec, iv);
+                //根据待加密内容生成字节数组
+                byte[] encrypted = cipher.doFinal(content.getBytes(ENCODING));
+                //返回base64字符串
+                return Base64Utils.encodeToString(encrypted);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * AES_CBC解密
+     *
+     * @param content 待解密内容
+     * @param aesKey  密码
+     * @return
+     */
+    public String decryptCBC(String content, String aesKey) {
+        if (StringUtils.isBlank(content)) {
+            return null;
+        }
+        //判断秘钥是否为16位
+        if (StringUtils.isNotBlank(aesKey) && aesKey.length() == 16) {
+            try {
+                //对密码进行编码
+                byte[] bytes = aesKey.getBytes(ENCODING);
+                //设置解密算法，生成秘钥
+                SecretKeySpec skeySpec = new SecretKeySpec(bytes, AES_ALGORITHM);
+                //偏移
+                IvParameterSpec iv = new IvParameterSpec(IV_SEED.getBytes(ENCODING));
+                // "算法/模式/补码方式"
+                Cipher cipher = Cipher.getInstance(CIPHER_CBC_PADDING);
+                //选择解密
+                cipher.init(Cipher.DECRYPT_MODE, skeySpec, iv);
+
+                //先进行Base64解码
+                byte[] decodeBase64 = Base64Utils.decodeFromString(content);
+
+                //根据待解密内容进行解密
+                byte[] decrypted = cipher.doFinal(decodeBase64);
+                //将字节数组转成字符串
+                return new String(decrypted, ENCODING);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+
+        } else {
+            return null;
+        }
+    }
+
+    public static void main(String[] args) {
+        // AES支持三种长度的密钥：128位、192位、256位。
+        // 代码中这种就是128位的加密密钥，16字节 * 8位/字节 = 128位。
+        SignUtil signUtil=new SignUtil();
+
+        System.out.println("---------加密---------");
+        String aesResult = signUtil.encrypt("1008698095","pay-10000-10086-");
+        System.out.println("aes加密结果:" + aesResult);
+        System.out.println();
+    }
 }
+

@@ -215,8 +215,7 @@ public class StudentServiceImpl {
         return new MyResponse(oid.toArray(new String[0]), amount.toArray(new Float[0]));
     }
 
-    public MyResponse takeMsg(String data) {
-        String decode = signUtil.decrypt(data);
-        return new MyResponse(1, decode);
+    public String takeMsg(String data) {
+        return signUtil.decrypt(data,"pay-10000-10086-");
     }
 }
