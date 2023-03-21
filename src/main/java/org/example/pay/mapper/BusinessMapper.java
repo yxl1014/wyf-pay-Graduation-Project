@@ -29,7 +29,7 @@ public interface BusinessMapper {
             "values(#{id_num},#{people},#{phone_num},#{shop_name},#{amount},#{parent_num},#{parent_password},#{create_time})")
     int insertBusiness(Business business);
 
-    @Select("select count(1) form business where parent_num = #{parent_num} and parent_num = #{parent_password}")
+    @Select("select count(1) from business where parent_num = #{parent_num} and parent_password = #{parent_password}")
     int findAllBusinessByNP(@Param("parent_num") String parent_num, @Param("parent_password") String parent_password);
 
     @Update("update business set parent_password = #{pwd} where parent_num = #{num}")

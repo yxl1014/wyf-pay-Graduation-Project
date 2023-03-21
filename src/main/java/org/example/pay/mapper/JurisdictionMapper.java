@@ -25,4 +25,7 @@ public interface JurisdictionMapper {
 
     @Update("update jurisdiction set using_j = #{status} where child_num = #{account}")
     int updateUsingByChildNum(@Param("status")int status,@Param("account") String account);
+
+    @Delete("delete from jurisdiction where child_num = #{account}")
+    int deleteJByAccount(@Param("account") String account);
 }

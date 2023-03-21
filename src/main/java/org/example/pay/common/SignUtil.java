@@ -213,7 +213,7 @@ public class SignUtil {
         SignUtil signUtil = new SignUtil();
 
         System.out.println("---------加密---------");
-        String aesResult = signUtil.encrypt("1008688310");
+        String aesResult = signUtil.encrypt("1008652700");
         System.out.println("aes加密结果:" + aesResult);
         System.out.println();
         aesResult = signUtil.decrypt(aesResult);

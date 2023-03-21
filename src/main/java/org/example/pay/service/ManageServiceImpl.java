@@ -200,13 +200,16 @@ public class ManageServiceImpl {
         }
         if (msg[0] != null) {
             Business bus = businessMapper.findBusinessByPn(msg[0]);
+            if (bus == null) {
+                return new MyResponse(0);
+            }
             childMapper.updateParentByAccount(bus.getId_num(), account);
         }
         if (msg[1] != null) {
             childMapper.updateBidByAccount(msg[1], account);
         }
         if (msg[2] != null) {
-            childMapper.updateNameByAccount(msg[1], account);
+            childMapper.updateNameByAccount(msg[2], account);
         }
         return new MyResponse(1);
     }
@@ -232,7 +235,11 @@ public class ManageServiceImpl {
                 return new MyResponse(0);
             }
             int i = businessMapper.deleteBusinessByPn(account);
+            List<Child> allChildByPid = childMapper.findAllChildByPid(business.getParent_num());
             int i1 = childMapper.deleteChildByPn(business.getParent_num());
+            for (Child c:allChildByPid){
+                jurisdictionMapper.deleteJByAccount(c.getBusiness_num());
+            }
             return new MyResponse(i + i1 >= 2 ? 1 : 0);
         }
         int i = childMapper.deleteChildByBid(account);

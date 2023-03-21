@@ -70,7 +70,7 @@ public class BusinessServiceImpl {
             String cp = randomUtil.getRandomPassword();
 
             int ok2 = childMapper.insertChild(new Child(cn, shop_name, id_num, cp, 0, 0,
-                    new Timestamp(now), twoHouseUtil.get2WHouse(signUtil.encrypt(cn))));
+                    new Timestamp(now), twoHouseUtil.get2WHouse(cn/*signUtil.encrypt(cn)*/)));
 
             int ok3 = jurisdictionMapper.insertJurisdiction(cn);
 
@@ -86,7 +86,7 @@ public class BusinessServiceImpl {
             String cp = randomUtil.getRandomPassword();
 
             int ok1 = childMapper.insertChild(new Child(cn, shop_name, id_num, cp, 0, 0,
-                    new Timestamp(now), twoHouseUtil.get2WHouse(signUtil.encrypt(cn))));
+                    new Timestamp(now), twoHouseUtil.get2WHouse(cn/*signUtil.encrypt(cn)*/)));
             int ok2 = jurisdictionMapper.insertJurisdiction(cn);
             int ok3 = applyMapper.insertApply(cn, 3, new Timestamp(now), 2, null);
             if (ok1 + ok2 + ok3 == 3) {

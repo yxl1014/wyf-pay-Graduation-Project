@@ -5,14 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="089b104e-3963-4368-bb79-f5361c0e4552" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/367eddcc-7225-467e-a069-50690c371b91.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/367eddcc-7225-467e-a069-50690c371b91.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/pay/common/SignUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/pay/common/SignUtil.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/pay/controller/BusinessController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/pay/controller/BusinessController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/pay/controller/StudentController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/pay/controller/StudentController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/pay/mapper/BusinessMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/pay/mapper/BusinessMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/pay/mapper/JurisdictionMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/pay/mapper/JurisdictionMapper.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/pay/service/BusinessServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/pay/service/BusinessServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/pay/service/StudentServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/pay/service/StudentServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/pay/service/ManageServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/pay/service/ManageServiceImpl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -116,7 +114,7 @@
       <workItem from="1679214100772" duration="4087000" />
       <workItem from="1679274174166" duration="12510000" />
       <workItem from="1679308338923" duration="21000" />
-      <workItem from="1679362557774" duration="1299000" />
+      <workItem from="1679362557774" duration="7569000" />
     </task>
     <servers />
   </component>
@@ -128,8 +126,13 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/org/example/pay/service/ManageServiceImpl.java</url>
-          <line>282</line>
+          <line>289</line>
           <option name="timeStamp" value="2" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/org/example/pay/service/ManageServiceImpl.java</url>
+          <line>232</line>
+          <option name="timeStamp" value="9" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
