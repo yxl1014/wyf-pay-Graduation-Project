@@ -5,10 +5,12 @@ import org.springframework.stereotype.Component;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.Base64Utils;
 
 import javax.crypto.spec.IvParameterSpec;
+
 /**
  * @author yxl
  * @date 2023/3/15 下午1:40
@@ -41,6 +43,14 @@ public class SignUtil {
      */
     private static final String IV_SEED = "1234567812345678";
 
+
+    private static final String ascKey = "pay-10000-10086-";
+
+
+    public String encrypt(String context) {
+        return this.encrypt(context, ascKey);
+    }
+
     /**
      * AES加密
      *
@@ -48,7 +58,7 @@ public class SignUtil {
      * @param aesKey  密码
      * @return
      */
-    public String encrypt(String content, String aesKey) {
+    private String encrypt(String content, String aesKey) {
         if (StringUtils.isBlank(content)) {
             return null;
         }
@@ -76,6 +86,10 @@ public class SignUtil {
         }
     }
 
+    public String decrypt(String context) {
+        return this.decrypt(context, ascKey);
+    }
+
     /**
      * 解密
      *
@@ -83,7 +97,7 @@ public class SignUtil {
      * @param aesKey  密码
      * @return
      */
-    public String decrypt(String content, String aesKey) {
+    private String decrypt(String content, String aesKey) {
         if (StringUtils.isBlank(content)) {
             return null;
         }
@@ -196,11 +210,14 @@ public class SignUtil {
     public static void main(String[] args) {
         // AES支持三种长度的密钥：128位、192位、256位。
         // 代码中这种就是128位的加密密钥，16字节 * 8位/字节 = 128位。
-        SignUtil signUtil=new SignUtil();
+        SignUtil signUtil = new SignUtil();
 
         System.out.println("---------加密---------");
-        String aesResult = signUtil.encrypt("1008698095","pay-10000-10086-");
+        String aesResult = signUtil.encrypt("1008688310");
         System.out.println("aes加密结果:" + aesResult);
+        System.out.println();
+        aesResult = signUtil.decrypt(aesResult);
+        System.out.println("aes解密结果:" + aesResult);
         System.out.println();
     }
 }

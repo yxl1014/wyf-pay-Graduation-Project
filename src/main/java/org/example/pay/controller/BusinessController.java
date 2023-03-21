@@ -93,4 +93,10 @@ public class BusinessController {
                                        @RequestParam("request_reason") String request_reason) {
         return businessService.requestAuthority(businesses_account, request_authority, request_reason);
     }
+
+    @PostMapping("/changeShopName")
+    public MyResponse changeShopName(@RequestParam("businesses_account") String businesses_account,
+                                               @RequestParam("new_shopname") String new_shopname) {
+        return businessService.changeShopName(businesses_account, new_shopname);
+    }
 }

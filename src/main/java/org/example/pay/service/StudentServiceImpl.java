@@ -216,6 +216,6 @@ public class StudentServiceImpl {
     }
 
     public String takeMsg(String data) {
-        return signUtil.decrypt(data,"pay-10000-10086-");
+        return signUtil.decrypt(data);
     }
 }

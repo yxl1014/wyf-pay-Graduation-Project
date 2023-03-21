@@ -41,4 +41,6 @@ public interface BusinessMapper {
     @Delete("delete from business where parent_password = #{parent_num}")
     int deleteBusinessByPn(@Param("parent_num") String parent_num);
 
+    @Update("update business set shop_name = #{shop_name} where parent_num = #{parent_num}")
+    int updateNameByAccount(@Param("shop_name") String new_shopname, @Param("parent_num") String parent_num);
 }

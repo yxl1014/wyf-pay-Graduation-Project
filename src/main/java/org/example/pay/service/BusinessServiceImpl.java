@@ -70,7 +70,7 @@ public class BusinessServiceImpl {
             String cp = randomUtil.getRandomPassword();
 
             int ok2 = childMapper.insertChild(new Child(cn, shop_name, id_num, cp, 0, 0,
-                    new Timestamp(now), twoHouseUtil.get2WHouse(signUtil.encrypt(cn, "pay-10000-10086-"))));
+                    new Timestamp(now), twoHouseUtil.get2WHouse(signUtil.encrypt(cn))));
 
             int ok3 = jurisdictionMapper.insertJurisdiction(cn);
 
@@ -86,7 +86,7 @@ public class BusinessServiceImpl {
             String cp = randomUtil.getRandomPassword();
 
             int ok1 = childMapper.insertChild(new Child(cn, shop_name, id_num, cp, 0, 0,
-                    new Timestamp(now), twoHouseUtil.get2WHouse(signUtil.encrypt(cn, "pay-10000-10086-"))));
+                    new Timestamp(now), twoHouseUtil.get2WHouse(signUtil.encrypt(cn))));
             int ok2 = jurisdictionMapper.insertJurisdiction(cn);
             int ok3 = applyMapper.insertApply(cn, 3, new Timestamp(now), 2, null);
             if (ok1 + ok2 + ok3 == 3) {
@@ -264,4 +264,21 @@ public class BusinessServiceImpl {
     }
 
 
+    public MyResponse changeShopName(String businesses_account, String new_shopname) {
+        if (businesses_account.startsWith("10000")) {
+            Business businessByPn = businessMapper.findBusinessByPn(businesses_account);
+            if (businessByPn == null) {
+                return new MyResponse(0);
+            }
+            int ok = businessMapper.updateNameByAccount(new_shopname, businesses_account);
+            return new MyResponse(ok);
+        } else {
+            Child child = childMapper.findChildByBid(businesses_account);
+            if (child == null) {
+                return new MyResponse(0);
+            }
+            int ok = childMapper.updateNameByAccount(new_shopname, businesses_account);
+            return new MyResponse(ok);
+        }
+    }
 }

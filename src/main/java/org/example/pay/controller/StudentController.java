@@ -81,8 +81,7 @@ public class StudentController {
     }
 
     @PostMapping("takeMsg")
-    @ResponseBody
-    public String takeMsg(@RequestParam("jiami")String data){
-        return studentService.takeMsg(data);
+    public MyResponse takeMsg(@RequestParam("jiami")String data){
+        return new MyResponse(1,studentService.takeMsg(data));
     }
 }
