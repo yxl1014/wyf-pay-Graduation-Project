@@ -105,7 +105,9 @@ public class MyResponse {
         this.student = student;
     }
 
-    public MyResponse(int status, String[] var1, String[] var2, String[] var3, String[] var4, Float[] var5, Integer[] var6) {
+    private Integer[] var7;
+
+    public MyResponse(int status, String[] var1, String[] var2, String[] var3, String[] var4, Float[] var5, Integer[] var6, Integer[] var7) {
         this.status = status;
         this.businessesRegister = var1;
         this.login_cId = var2;
@@ -113,6 +115,7 @@ public class MyResponse {
         this.login_cTime = var4;
         this.login_allAmount = var5;
         this.order_id = var6;
+        this.var7 = var7;
     }
 
     public MyResponse(int status, String[] var1, String[] var2, String[] var3, Integer[] var4, String[] var5) {

@@ -237,7 +237,7 @@ public class ManageServiceImpl {
             int i = businessMapper.deleteBusinessByPn(account);
             List<Child> allChildByPid = childMapper.findAllChildByPid(business.getParent_num());
             int i1 = childMapper.deleteChildByPn(business.getParent_num());
-            for (Child c:allChildByPid){
+            for (Child c : allChildByPid) {
                 jurisdictionMapper.deleteJByAccount(c.getBusiness_num());
             }
             return new MyResponse(i + i1 >= 2 ? 1 : 0);
@@ -260,6 +260,7 @@ public class ManageServiceImpl {
         List<String> cname = new ArrayList<>();
         List<Float> amount = new ArrayList<>();
         List<Integer> idd = new ArrayList<>();
+        List<Integer> type = new ArrayList<>();
         for (Apply apply : apply1) {
             Child child = childMapper.findChildByBid(apply.getAccount());
             Business business = businessMapper.findBusinessById(child.getParent_num());
@@ -269,6 +270,7 @@ public class ManageServiceImpl {
             cname.add(child.getBusiness_name());
             amount.add(child.getAmount());
             idd.add(apply.getAid());
+            type.add(apply.getType());
         }
         for (Apply apply : apply2) {
             Child child = childMapper.findChildByBid(apply.getAccount());
@@ -279,9 +281,10 @@ public class ManageServiceImpl {
             cname.add(child.getBusiness_name());
             amount.add(child.getAmount());
             idd.add(apply.getAid());
+            type.add(apply.getType());
         }
         return new MyResponse(1, name.toArray(new String[0]), id.toArray(new String[0]), tel.toArray(new String[0]),
-                cname.toArray(new String[0]), amount.toArray(new Float[0]), idd.toArray(new Integer[0]));
+                cname.toArray(new String[0]), amount.toArray(new Float[0]), idd.toArray(new Integer[0]),type.toArray(new Integer[0]));
     }
 
 
