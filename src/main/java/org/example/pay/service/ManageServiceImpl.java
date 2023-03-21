@@ -235,8 +235,8 @@ public class ManageServiceImpl {
                 return new MyResponse(0);
             }
             int i = businessMapper.deleteBusinessByPn(account);
-            List<Child> allChildByPid = childMapper.findAllChildByPid(business.getParent_num());
-            int i1 = childMapper.deleteChildByPn(business.getParent_num());
+            List<Child> allChildByPid = childMapper.findAllChildByPid(business.getId_num());
+            int i1 = childMapper.deleteChildByPn(business.getId_num());
             for (Child c : allChildByPid) {
                 jurisdictionMapper.deleteJByAccount(c.getBusiness_num());
             }
